@@ -1,6 +1,6 @@
 ---
 name: doubao-storyboard-video
-description: "Create Doubao-ready storyboard packages from a finished video prompt or script: split into ten-second-or-shorter segments, plan cuts, generate character reference sheets and storyboard frames, compose Chinese storyboard board images, and write matching segment prompts. Use when asked for 分镜故事板, 人物参考图, 豆包视频提示词, storyboards, or reusable video-generation packs."
+description: "Create review-safe Doubao/Seedance storyboard packages from a finished video prompt or script: split into ten-second-or-shorter segments, generate adult character references, draw graphite-pencil storyboard frames, compose light three-panel Chinese boards, and write aligned segment prompts. Use when asked for 分镜故事板, 人物参考图, 豆包视频提示词, storyboards, or reusable video-generation packs."
 ---
 
 # Doubao Storyboard Video
@@ -10,8 +10,8 @@ description: "Create Doubao-ready storyboard packages from a finished video prom
 Create a single output folder containing:
 
 - Character reference images for recurring adult main characters. For realistic Seedance/Doubao short dramas, default to one image per role: left side realistic colored faceless full-body figure, right side black-and-white face sketch, with only a simple role label.
-- Storyboard frame stills for each cut.
-- One final storyboard board image per Doubao segment.
+- Review-safe black-and-white graphite storyboard frames for each cut. Do not put photorealistic human faces on final boards unless the user explicitly requests that risk.
+- One light warm-paper three-panel storyboard board image per Doubao segment.
 - A Markdown file with one complete video-generation prompt per segment.
 
 Default to Doubao's maximum duration rule: every segment must be `<=10` seconds. If the source video is longer, split it into consecutive segments such as `00:00-00:09`, `00:09-00:17`, `00:17-00:25`.
@@ -48,21 +48,23 @@ For realistic short dramas, estimate duration from spoken dialogue plus action a
    - For young adult characters or review-sensitive face references, make the right-side face sketch visibly sketch-like: lower contrast, weaker line weight, less portrait-like detail. Keep the colored faceless full-body side unchanged.
    - If a platform rejects a role reference for portrait or likeness protection, first weaken, blur, or lighten the face-sketch half; if needed, use only the colored faceless full-body figure and describe the face in text.
    - If the user explicitly requests a turnaround instead of the default role-reference layout, ask for exactly three full-body views of the same adult character: front, side, back.
-   - For cut stills: generate 16:9 horizontal storyboard references even if the final video is 9:16; include the final video ratio inside the segment prompts.
+   - For every cut still, default to a 16:9 black-and-white graphite pencil storyboard on slightly warm off-white paper. Match `assets/graphite-storyboard-frame-reference.png` for line density, cross-hatching, paper tone, and non-photographic finish.
+   - Preserve camera angle, blocking, gestures, props, clothing silhouette, gaze direction, and dramatic beat. Simplify every face into a generic adult sketch face with approximate expression only.
+   - Explicitly prohibit photographic identity: no pores, skin texture, eye catchlights, precise likeness, portrait rendering, celebrity likeness, or photo depth-of-field. A grayscale photo filter is not enough; redraw the scene as an illustration.
+   - If a photorealistic concept image was useful during planning, keep it out of the final upload package. Redraw it as graphite before composing the final board.
+   - Include the final video ratio inside segment prompts even though storyboard frames are horizontal references.
    - Repeat critical prohibitions in every prompt, for example no minors, no real logos, no readable school names, no subtitles, no watermark.
    - If the user provided example storyboards, treat them as layout/style references, not edit targets, unless explicitly asked.
    - Copy final generated images into the output folder; do not leave project-bound assets only under `$CODEX_HOME/generated_images`.
 
 5. Compose final storyboard boards.
-   - Prefer `scripts/compose_storyboard_boards.py` for deterministic Chinese table layout.
+   - Prefer `scripts/compose_sketch_storyboard_boards.py` for the default review-safe board.
    - For each `<=10` second Doubao segment, include 2-3 storyboard frames when the segment has more than one action, reaction, or evidence beat. Use one frame only for very simple beats; avoid more than three frames unless the board remains readable.
-   - The board should have these columns: `镜头`, `分镜图`, `运镜流程 / 景别`, `内容与对白`.
-   - Use the detailed approval-oriented board format by default for short dramas and any user-facing storyboard package. See `references/detailed-storyboard-board.md`.
-   - In the `内容与对白` column, do not write a short summary only. For every cut, include `主体`, `动作`, `描述`, `台词`, and `音效` so reviewers can understand exactly what is on screen and what happens.
-   - In the `运镜流程 / 景别` column, include a bilingual or clear shot label, a camera icon/arrow when composing visually, and a short movement note such as `从证据转到表情` or `从手机页面扫到现实后门`.
-   - Add a bottom production strip titled `制作设定 / 豆包分段提示` with three blocks: `空间与人物位置`, `灯光 / 色彩 / 道具`, and `风格 / 禁忌 / 分段提示词`.
-   - Include a simple space/blocking diagram and color swatches in the bottom strip when the board is an image, especially for realistic short dramas.
-   - If the bundled script cannot fit the detailed layout cleanly, create a custom composer for that package, but keep the same information architecture.
+   - Match `assets/light-three-panel-board-reference.png`: light warm-paper canvas, large title and beat subtitle, three graphite panels across the top, then `画面 / 动作`, `运镜 / 节奏`, `台词`, `声音 / 禁止项`, and a bottom `豆包提示摘要` strip.
+   - Keep full exact dialogue in the dialogue box. Keep camera and action prose compact enough to scan without zooming.
+   - Repeat `草图参考，不复刻具体五官；不要照片级人物` in the board's prohibition box when human faces appear.
+   - Use `scripts/compose_storyboard_boards.py` and `references/detailed-storyboard-board.md` only when the user explicitly asks for the dense dark production-table format.
+   - See `references/review-safe-sketch-storyboards.md` for the frame prompt, JSON schema, and acceptance checklist.
 
 6. Write segment prompts.
    - Use `references/segment-prompt-template.md` as the shape.
@@ -78,24 +80,25 @@ For realistic short dramas, estimate duration from spoken dialogue plus action a
 7. Validate before final response.
    - Confirm every segment is `<=10` seconds.
    - Confirm the output folder contains all promised files.
-   - Inspect at least one final storyboard board visually with `view_image`; inspect all boards if time or layout risk is high.
-   - Check for common failures: text overflowing, missing cut images, accidental minors, real logos/school names, readable fake UI text where none was requested, inconsistent role names, or missing dialogue.
+   - Inspect every final storyboard board visually with `view_image` when human faces are present.
+   - Check that all final frame panels are clearly hand-drawn graphite illustrations, not grayscale photographs or photo-like pencil filters.
+   - Check for common failures: precise portrait likeness, realistic skin/eyes, text overflowing, missing cut images, accidental minors, real logos/school names, readable fake UI text where none was requested, inconsistent role names, or missing dialogue.
 
 ## Compose Script
 
-Resolve the bundled script relative to this `SKILL.md`, then run it like this:
+Resolve the bundled script relative to this `SKILL.md`, then run the default sketch-board composer like this:
 
 ```powershell
-python "<skill-directory>/scripts/compose_storyboard_boards.py" `
+python "<skill-directory>/scripts/compose_sketch_storyboard_boards.py" `
   --spec "<project-directory>/storyboard_spec.json" `
   --image-dir "<project-directory>/assets" `
-  --out-dir "<project-directory>/boards"
+  --out-dir "<project-directory>"
 ```
 
 The JSON spec format is documented in the script help:
 
 ```powershell
-python "<skill-directory>/scripts/compose_storyboard_boards.py" --help
+python "<skill-directory>/scripts/compose_sketch_storyboard_boards.py" --help
 ```
 
 The composer requires Python 3, Pillow, and an installed CJK font such as Microsoft YaHei, SimHei, PingFang, or Noto Sans CJK.
@@ -106,7 +109,7 @@ For sensitive source scripts, carry constraints forward aggressively. A prohibit
 
 For real-life short dramas, prefer:
 
-- Realistic office or home texture over glossy cinematic exaggeration.
+- Graphite storyboard texture for uploaded reference frames; reserve realism for the generated video prompt, not the board image.
 - Handheld camera language when the source calls for realism.
 - Cold/warm lighting notes tied to the actual scene.
 - Direct behavioral acting notes: who pressures, who restrains, who reverses the scene.
