@@ -1,0 +1,22 @@
+{
+  "name": "doubao-storyboard-video",
+  "version": "0.1.0",
+  "description": "Create Doubao and Seedance storyboard packages, character reference sheets, storyboard boards, and segment prompts from a finished script.",
+  "author": {
+    "name": "菠萝咪小剧场",
+    "url": "https://github.com/roncyx726-debug"
+  },
+  "homepage": "https://github.com/roncyx726-debug/doubao-storyboard-video#readme",
+  "repository": "https://github.com/roncyx726-debug/doubao-storyboard-video",
+  "keywords": ["doubao", "seedance", "storyboard", "short-drama", "codex-skill"],
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "Doubao Storyboard Video",
+    "shortDescription": "Turn scripts into Doubao storyboard production packs.",
+    "longDescription": "Split a finished short-drama script into generation-ready segments, create character reference sheets and cut stills, compose Chinese storyboard boards, and write aligned Doubao or Seedance prompts.",
+    "developerName": "菠萝咪小剧场",
+    "category": "Creative",
+    "capabilities": ["Interactive", "Write"],
+    "defaultPrompt": "Turn this finished short-drama script into a complete Doubao storyboard production pack."
+  }
+}

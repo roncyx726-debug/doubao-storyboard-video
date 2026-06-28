@@ -1,0 +1,6 @@
+interface:
+  display_name: "Doubao Storyboard Video"
+  short_description: "Create Doubao storyboard packs."
+  default_prompt: "Use $doubao-storyboard-video to turn this finished video script into storyboard boards, character reference sheets, and Doubao segment prompts."
+policy:
+  allow_implicit_invocation: true
